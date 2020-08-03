@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+echo "The Answer STDOUT"
+echo "The Answer STDERR" >&2
+exit 42

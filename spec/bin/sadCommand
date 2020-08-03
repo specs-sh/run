@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+echo "Sad STDOUT"
+echo "Sad STDERR" >&2
+exit 1
