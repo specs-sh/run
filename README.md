@@ -21,7 +21,7 @@ $ echo "$STDERR"
 
 ---
 
-- The `run` function returns whatever the underlying command's exit code is
+- The `run` function returns the underlying command's exit or return code
 - The command or function's return code is put into an `$EXIT_CODE` variable
 - The command or function's output is put into a `$STDOUT` variable
 - The command or function's standard error is put into a `$STDERR` variable
