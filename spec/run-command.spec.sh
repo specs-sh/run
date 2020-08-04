@@ -36,6 +36,10 @@ noSTDERR() {
 
 PATH="$PATH:spec/bin"
 
+@spec.getVersion() {
+  expect "$( run --version )" toMatch "run[[:space:]]version[[:space:]][0-9].[0-9].[0-9]"
+}
+
 @spec.can_get_exit_code() {
   assert run happyCommand
   expect "$EXIT_CODE" toEqual 0
@@ -128,4 +132,25 @@ PATH="$PATH:spec/bin"
   run noSTDOUT
   expect "$OUTPUT" toEqual "\nSTDERR only, please!"
   expect "$( OUTPUT )" toEqual "\nSTDERR only, please!"
+}
+
+verifyRunsLocally() {
+  foo="Haha! Changed by the command that was run!"
+}
+
+@spec.run.does_not_run_in_subshell() {
+  local foo=5
+
+  run verifyRunsLocally
+
+  expect "$foo" not toEqual 5
+  expect "$foo" toEqual "Haha! Changed by the command that was run!"
+}
+
+@spec.run.can_be_run_in_subshell() {
+  local foo=5
+
+  run -- verifyRunsLocally
+
+  expect "$foo" toEqual 5
 }
