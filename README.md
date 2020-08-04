@@ -9,14 +9,26 @@ $ source "run-command.sh"
 
 $ run ls
 
+$ echo $?
+0
+
 $ echo "$EXIT_CODE"
+0
+
+$ EXIT_CODE
 0
 
 $ echo "$STDOUT"
 foo
 bar
 
+$ STDOUT
+foo
+bar
+
 $ echo "$STDERR"
+
+$ STDERR
 ```
 
 ---
