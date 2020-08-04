@@ -107,3 +107,25 @@ PATH="$PATH:spec/bin"
   expect "$STDERR" not toBeEmpty
   expect "$( STDERR )" not toBeEmpty
 }
+
+@spec.can_get_OUTPUT() {
+  assert run happyFunction
+  expect "$OUTPUT" toEqual "Happy STDOUT\nHappy STDERR"
+  expect "$( OUTPUT )" toEqual "Happy STDOUT\nHappy STDERR"
+
+  refute run sadFunction
+  expect "$OUTPUT" toEqual "Sad STDOUT\nSad STDERR"
+  expect "$( OUTPUT )" toEqual "Sad STDOUT\nSad STDERR"
+
+  refute run theAnswerFunction
+  expect "$OUTPUT" toEqual "The Answer STDOUT\nThe Answer STDERR"
+  expect "$( OUTPUT )" toEqual "The Answer STDOUT\nThe Answer STDERR"
+
+  run noSTDERR
+  expect "$OUTPUT" toEqual "STDOUT only, please!\n"
+  expect "$( OUTPUT )" toEqual "STDOUT only, please!"
+
+  run noSTDOUT
+  expect "$OUTPUT" toEqual "\nSTDERR only, please!"
+  expect "$( OUTPUT )" toEqual "\nSTDERR only, please!"
+}

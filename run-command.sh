@@ -6,6 +6,7 @@ run() {
   EXIT_CODE=$?
   STDOUT="$( cat "$stdoutFile" )"
   STDERR="$( cat "$stderrFile" )"
+  OUTPUT="${STDOUT}\n${STDERR}"
   rm -f "$stdoutFile"
   rm -f "$stderrFile"
   return $EXIT_CODE
@@ -21,4 +22,8 @@ STDOUT() {
 
 STDERR() {
   printf "$STDERR"
+}
+
+OUTPUT() {
+  printf "$OUTPUT"
 }

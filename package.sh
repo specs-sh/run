@@ -1,6 +1,6 @@
 name run-command
 
-version 0.1.0
+version 0.1.1
 
 description "🚀 Run a command and get its STDOUT/STDERR exit code (for easy testing)"
 
