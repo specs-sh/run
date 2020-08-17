@@ -1,5 +1,5 @@
 run() {
-  VERSION="0.2.0"
+  local VERSION="0.3.0"
   [[ "$1" = "--version" ]] && { echo "run version $VERSION"; return 0; }
   local runInSubShell=false
   if [[ "$1" = "--" ]]
@@ -24,20 +24,4 @@ run() {
   rm -f "$stdoutFile"
   rm -f "$stderrFile"
   return $EXIT_CODE
-}
-
-EXIT_CODE() {
-  printf "$EXIT_CODE"
-}
-
-STDOUT() {
-  printf "$STDOUT"
-}
-
-STDERR() {
-  printf "$STDERR"
-}
-
-OUTPUT() {
-  printf "$OUTPUT"
 }
