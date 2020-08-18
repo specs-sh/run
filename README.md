@@ -41,31 +41,12 @@ $ echo "$EXIT_CODE"
 0
 ```
 
-#### `EXIT_CODE`
-
-You can also get the return code by calling the `EXIT_CODE` function
-
-```
-$ EXIT_CODE
-0
-```
-
 #### `$STDOUT`
 
 The command or function's output is put into a `$STDOUT` variable
 
 ```sh
 $ echo "$STDOUT"
-foo
-bar
-```
-
-#### `STDOUT`
-
-You can also get the output by calling the `STDOUT` function
-
-```sh
-$ STDOUT
 foo
 bar
 ```
@@ -78,30 +59,12 @@ The command or function's standard error is put into a `$STDERR` variable
 $ echo "$STDERR"
 ```
 
-#### `STDERR`
-
-You can also get the standard error by calling the `STDERR` function
-
-```sh
-$ STDERR
-```
-
 #### `$OUTPUT`
 
 The command or function's `STDOUT` and `STDERR` are both put into an `$OUTPUT` variable
 
 ```sh
 $ echo "$OUTPUT
-foo
-bar
-```
-
-#### `OUTPUT`
-
-You can also get the combined `STDOUT` and `STDERR` by calling the `OUTPUT` function
-
-```sh
-$ OUTPUT
 foo
 bar
 ```
