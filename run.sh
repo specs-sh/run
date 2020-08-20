@@ -1,27 +1,74 @@
 run() {
-  local VERSION="0.3.0"
-  [[ "$1" = "--version" ]] && { echo "run version $VERSION"; return 0; }
-  local runInSubShell=false
-  if [[ "$1" = "--" ]]
+  local RUN_VERSION="0.3.0"
+  [[ "$1" = "--version" ]] && { echo "run version $RUN_VERSION"; return 0; }
+  local ___run___RunInSubshell=false
+  declare -a ___run___CommandToRun=()
+  if [ "$1" = "{" ]
   then
-    runInSubShell=true
     shift
-  fi
-  local stdoutFile="$( mktemp )"
-  local stderrFile="$( mktemp )"
-  local _
-  if [ "$runInSubShell" = "true" ]
+    while [ "$1" != "}" ] && [ $# -gt 0 ]
+    do
+      ___run___CommandToRun+=("$1")
+      shift
+    done
+    if [ "$1" = "}" ]
+    then
+      shift
+      if [ $# -ne 0 ]
+      then
+        # TODO TEST
+        echo "'run' called with '{ ... }' block but unexpected argument found after block: '$1'" >&2
+        return 1
+      fi
+    else
+      # TODO TEST
+      echo "'run' called with '{' block but no closing '}' found" >&2
+      return 1
+    fi
+  elif [ "$1" = "{{" ]
   then
-    _="$( "$@" 1>"$stdoutFile" 2>"$stderrFile" )"
-    EXIT_CODE=$?
+    ___run___RunInSubshell=true
+    shift
+    while [ "$1" != "}}" ] && [ $# -gt 0 ]
+    do
+      ___run___CommandToRun+=("$1")
+      shift
+    done
+    if [ "$1" = "}}" ]
+    then
+      shift
+      if [ $# -ne 0 ]
+      then
+        # TODO TEST
+        echo "'run' called with '{{ ... }}' block but unexpected argument found after block: '$1'" >&2
+        return 1
+      fi
+    else
+      # TODO TEST
+      echo "'run' called with '{{' block but no closing '}}' found" >&2
+      return 1
+    fi
   else
-    "$@" 1>"$stdoutFile" 2>"$stderrFile"
-    EXIT_CODE=$?
+    while [ $# -gt 0 ]
+    do
+      ___run___CommandToRun+=("$1")
+      shift
+    done
   fi
-  STDOUT="$( cat "$stdoutFile" )"
-  STDERR="$( cat "$stderrFile" )"
-  OUTPUT="${STDOUT}\n${STDERR}"
-  rm -f "$stdoutFile"
-  rm -f "$stderrFile"
-  return $EXIT_CODE
+  local ___run___STDOUT_TempFile="$( mktemp )"
+  local ___run___STDERR_TempFile="$( mktemp )"
+  local ___run___UnusedOutput
+  if [ "$___run___RunInSubshell" = "true" ]
+  then
+    ___run___UnusedOutput="$( "${___run___CommandToRun[@]}" 1>"$___run___STDOUT_TempFile" 2>"$___run___STDERR_TempFile" )"
+    EXITCODE=$?
+  else
+    "${___run___CommandToRun[@]}" 1>"$___run___STDOUT_TempFile" 2>"$___run___STDERR_TempFile"
+    EXITCODE=$?
+  fi
+  STDOUT="$( < "$___run___STDOUT_TempFile" )"
+  STDERR="$( < "$___run___STDERR_TempFile" )"
+  rm -f "$___run___STDOUT_TempFile"
+  rm -f "$___run___STDERR_TempFile"
+  return $EXITCODE
 }
