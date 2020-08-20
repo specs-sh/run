@@ -42,24 +42,24 @@ PATH="$PATH:spec/bin"
 
 @spec.can_get_exit_code() {
   assert run happyCommand
-  expect "$EXIT_CODE" toEqual 0
+  expect "$EXITCODE" toEqual 0
 
   refute run sadCommand
-  expect "$EXIT_CODE" toEqual 1
+  expect "$EXITCODE" toEqual 1
 
   refute run theAnswerCommand
-  expect "$EXIT_CODE" toEqual 42
+  expect "$EXITCODE" toEqual 42
 }
 
 @spec.can_get_return_code() {
   assert run happyFunction
-  expect "$EXIT_CODE" toEqual 0
+  expect "$EXITCODE" toEqual 0
 
   refute run sadFunction
-  expect "$EXIT_CODE" toEqual 1
+  expect "$EXITCODE" toEqual 1
 
   refute run theAnswerFunction
-  expect "$EXIT_CODE" toEqual 42
+  expect "$EXITCODE" toEqual 42
 }
 
 @spec.can_get_STDOUT() {
