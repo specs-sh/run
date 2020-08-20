@@ -4,7 +4,7 @@ PACKAGE_PATH=.:packages/
 
 import @assert
 import @expect
-import @run-command
+import @run
 
 happyFunction() {
   echo "Happy STDOUT"
@@ -132,4 +132,12 @@ verifyRunsLocally() {
   run -- verifyRunsLocally
 
   expect "$foo" toEqual 5
+}
+
+@pending.can_run_using_curl_brace_syntax() {
+  :
+}
+
+@pending.can_run_in_subshell_using_double_curly_braces() {
+  :
 }

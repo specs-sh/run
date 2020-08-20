@@ -4,7 +4,7 @@ version "$( grep VERSION= run-command.sh | sed 's/.*VERSION=\(.*\)/\1/' | sed 's
 
 description "🚀 Run a command and get its STDOUT/STDERR exit code (for easy testing)"
 
-main run-command.sh
+main run.sh
 
 exclude spec/
 
