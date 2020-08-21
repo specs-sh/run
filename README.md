@@ -7,7 +7,7 @@ Test Function or Command Output.
 Download the [latest version](https://github.com/bx-sh/run.sh/archive/v0.2.0.tar.gz)
 
 ```sh
-$ source "run-command.sh"
+$ source "run.sh"
 ```
 
 ---
@@ -17,7 +17,7 @@ $ source "run-command.sh"
 The `run` function returns the underlying command or function's exit or return code
 
 ```sh
-$ run ls
+$ run ls -l
 
 $ echo $?
 0
@@ -26,7 +26,7 @@ $ echo $?
 The command does not run in a subshell. If you would like to run the command in a subshell:
 
 ```sh
-$ run -- ls
+$ run {{ ls -l }}
 
 $ echo $?
 0
@@ -46,6 +46,8 @@ $ echo "$EXIT_CODE"
 The command or function's output is put into a `$STDOUT` variable
 
 ```sh
+$ run ls
+
 $ echo "$STDOUT"
 foo
 bar
@@ -56,15 +58,7 @@ bar
 The command or function's standard error is put into a `$STDERR` variable
 
 ```sh
+$ run ls
+
 $ echo "$STDERR"
-```
-
-#### `$OUTPUT`
-
-The command or function's `STDOUT` and `STDERR` are both put into an `$OUTPUT` variable
-
-```sh
-$ echo "$OUTPUT
-foo
-bar
 ```
