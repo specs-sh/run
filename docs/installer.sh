@@ -3,23 +3,25 @@
 install() {
   echo "🚀 [run.sh]"
   echo
-  printf "Checking for latest version... "
+  printf "Checking for latest release... "
   local latestReleaseInfoUrl="https://api.github.com/repos/bx-sh/run.sh/releases/latest"
-  local downloadUrl="$( curl -s "$latestReleaseInfoUrl" | grep tarball | awk '{print $2}' | sed 's/[",]//g' )"
+  local apiTarballUrl="$( curl -s "$latestReleaseInfoUrl" | grep tarball | awk '{print $2}' | sed 's/[",]//g' )"
   [ $? -ne 0 ] && { echo -e "\nFailed to get latest release version of run.sh ($latestReleaseInfoUrl)"; return 1; }
-  local latestVersion="${downloadUrl/*\/}"
-  echo "$latestVersion"
+  local latestRelease="${apiTarballUrl/*\/}"
+  echo "$latestRelease"
   echo
   printf "Downloading... "
   local workingDirectory="$( pwd )"
   local tempDirectory="$( mktemp -d )"
   cd "$tempDirectory"
+  local downloadUrl="https://github.com/bx-sh/run.sh/archive/$latestRelease.tar.gz"
+  local tarfile="${downloadUrl/*\/}"
   curl -O "$downloadUrl" &>/dev/null
-  [ ! -f latest.tar.gz ] && { echo "Failed to download: $downloadUrl"; return 1; }
-  tar zxvf latest.tar.gz &>/dev/null
-  [ ! -f run.sh ] && { echo "Failed to extract latest.tar.gz: $tempDirectory/latest.tar.gz"; return 1; }
-  local runVersion="$( grep "RUN_VERSION=" run.sh | sed 's/RUN_VERSION=//' )"
-  printf "run.sh version ${runVersion//\"} downloaded.\n"
+  [ ! -f "$tarfile" ] && { echo "Failed to download: $downloadUrl"; return 1; }
+  tar zxvf "$tarfile" &>/dev/null
+  [ ! -f run.sh ] && { echo "Failed to extract $tarfile: $tempDirectory/$tarfile"; return 1; }
+  local downloadedVersion="$( grep "RUN_VERSION=" run.sh | sed 's/RUN_VERSION=//' )"
+  printf "run.sh version ${downloadedVersion//\"} downloaded.\n"
   echo
   cp run.sh "$workingDirectory/run.sh"
   cd "$workingDirectory"
