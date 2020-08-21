@@ -118,9 +118,9 @@ To run a function or command in a **subshell**:
   # => 42           # <--- value of 'x' changed to '42'
   ```
 
-> `run.sh` supports the use of both `{}` curly braces and `[]` brackets to better support commands which use either brackets or curly braces as command line arguments.
+> `run.sh` supports both braces and brackets to better support commands which use brackets or braces as arguments.
 >
-> If you want to call the `[` shell builtin function, you must wrap the command in `{}`:
+> If you want to call the `[` shell builtin function, you must wrap the command in `{ ... }`:
 > ```sh
 > run { [ 1 -eq 1 ] }
 > echo "$EXITCODE"
