@@ -1,6 +1,6 @@
 # 🚀 `run $command`
 
-> Simplest possible `run` command for beautiful shell script tests!
+> _Simplest possible `run` command for beautiful shell script tests!_
 
 ---
 
@@ -36,9 +36,9 @@ printf "$EXITCODE"
 
 ---
 
-## 🚀 run $command
+## run $command
 
-#### `$STDOUT`
+### `$STDOUT`
 
 To get the standard output, check the `$STDOUT` variable:
 
@@ -49,7 +49,7 @@ printf "$STDOUT"
 # => Hello, world
 ```
 
-#### `$STDERR`
+### `$STDERR`
 
 To get the standard output, check the `$STDERR` variable:
 
@@ -60,7 +60,7 @@ printf "$STDERR"
 # => foo: command not found
 ```
 
-#### `$EXITCODE`
+### `$EXITCODE`
 
 To get the standard output, check the `$EXITCODE` variable:
 
@@ -78,7 +78,7 @@ printf $EXITCODE
 # => 127
 ```
 
-#### `{ Current Shell }` or `{{ Subshell }}`
+### `{ Current Shell }` or `{{ Subshell }}`
 
 To run a function or command in the **current shell**:
 
