@@ -16,7 +16,7 @@
 
 ---
 
-Download the [latest version](https://github.com/bx-sh/run.sh/archive/v0.4.0.tar.gz) by clicking one of the download links above or:
+Download the [latest version](https://github.com/bx-sh/run.sh/archive/v0.4.0.tar.gz) or install via:
 
 #### `curl -o- https://run.assert.sh/installer.sh | bash`
 
