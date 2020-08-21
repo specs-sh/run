@@ -265,10 +265,11 @@ verifyRunsLocally() {
 }
 
 @spec.curlies_not_closed() {
-  expect { run { hello } toFail "'run' called with '{' block but no closing '}' found"
-  expect { run {{ hello } toFail "'run' called with '{{' block but no closing '}}' found"
+  expect [ run { hello ] toFail "'run' called with '{' block but no closing '}' found"
+  expect [ run {{ hello ] toFail "'run' called with '{{' block but no closing '}}' found"
 }
 
 @spec.curlies_with_extra_arguments() {
-  expect [ run { ls } anotherArg ] toFail "???"
+  expect [ run { ls } anotherArg ] toFail "'run' called with '{ ... }' block but unexpected argument found after block: 'anotherArg'"
+  expect [ run {{ ls }} anotherArg ] toFail "'run' called with '{{ ... }}' block but unexpected argument found after block: 'anotherArg'"
 }
