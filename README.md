@@ -103,7 +103,9 @@ To run a function or command in a **subshell**:
    run [[ echo "Hello world" ]] # <--- runs in a SUBSHELL
    ```
 
-ℹ️ Commands run inside subshells have access to all local variables but changes are not reflected in the outer shell:
+#### ℹ️ Subshells
+
+Commands run inside subshells have access to all local variables but changes are not reflected in the outer shell:
 
 - ```sh
   setX() { x="$1"; }
