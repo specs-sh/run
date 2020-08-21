@@ -128,5 +128,20 @@ Commands run inside subshells have access to all local variables but changes are
 >
 > To call the `[` shell builtin function, use braces: `run { [ 1 -eq 2 ] }`
 
+---
+
+## Related Projects
+
+ - ☑️ [`assert.sh`](https://assert.sh) for `assert [ 1 -eq 42 ]` style assertions
+ - 🧐 [`expect.sh`](https://expectations.sh) for `expect 1 toEqual 42` style assertions
+ - 🔬 [`spec.sh`](https://specs.sh) for a lovely shell specification testing framework
+
+---
+
+#### Test Framework Compatibility
+
+- [Bats](https://github.com/bats-core/bats-core)
+- [shUnit2](https://github.com/kward/shunit2/)
+- [roundup](http://bmizerany.github.io/roundup/roundup.1.html)
 
 {% endraw %}
