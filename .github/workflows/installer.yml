@@ -1,4 +1,4 @@
-name: BASH 5.0
+name: Installer
 
 on:
   push:
