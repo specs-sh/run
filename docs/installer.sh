@@ -19,7 +19,7 @@ install() {
   tar zxvf latest.tar.gz &>/dev/null
   [ ! -f run.sh ] && { echo "Failed to extract latest.tar.gz: $tempDirectory/latest.tar.gz"; return 1; }
   local runVersion="$( grep "RUN_VERSION=" run.sh | sed 's/RUN_VERSION=//' )"
-  printf "run.sh version ${runVersion//"} downloaded.\n"
+  printf "run.sh version ${runVersion//\"} downloaded.\n"
   echo
   cp run.sh "$workingDirectory/run.sh"
   cd "$workingDirectory"
