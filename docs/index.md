@@ -107,7 +107,9 @@ To run a function or command in a **subshell**:
    run [[ echo "Hello world" ]] # <--- runs in a SUBSHELL
    ```
 
-ℹ️ Commands run inside of subshells have access to all local variables but changes to variables are not reflected in the outer shell:
+##### ℹ️ Subshells
+
+Commands run inside subshells have access to all local variables but changes are not reflected in the outer shell:
 
 - ```sh
   setX() { x="$1"; }
@@ -122,16 +124,9 @@ To run a function or command in a **subshell**:
   # => 42           # <--- value of 'x' changed to '42'
   ```
 
-> Both `{}` curly braces and `[]` brackets are used to support running commands which, themselves, use either brackets or curly braces.
+> `run.sh` supports both braces and brackets to support commands which use brackets or braces as arguments.
 >
-> If you want to call the `[` shell builtin function, you can use `{}`:
-> ```sh
-> run { [ 1 -eq 1 ] }
-> echo "$EXITCODE"
-> # => 0
-> run { [ 1 -eq 2 ] }
-> echo "$EXITCODE"
-> # => 1
-> ```
+> To call the `[` shell builtin function, use braces: `run { [ 1 -eq 2 ] }`
+
 
 {% endraw %}

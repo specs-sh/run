@@ -123,4 +123,3 @@ Commands run inside subshells have access to all local variables but changes are
 > `run.sh` supports both braces and brackets to support commands which use brackets or braces as arguments.
 >
 > To call the `[` shell builtin function, you must wrap the command in braces: `run { [ 1 -eq 2 ] }`
-``
