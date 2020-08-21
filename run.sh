@@ -1,5 +1,5 @@
 run() {
-  local RUN_VERSION="0.3.0"
+  local RUN_VERSION="0.4.0"
   [[ "$1" = "--version" ]] && { echo "run version $RUN_VERSION"; return 0; }
   local ___run___RunInSubshell=false
   declare -a ___run___CommandToRun=()

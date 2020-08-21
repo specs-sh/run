@@ -1,4 +1,8 @@
-# 🚀 `run $command`
+---
+---
+
+{% raw %}
+## `run $command`
 
 > Simplest possible `run` command for beautiful shell script tests!
 
@@ -129,3 +133,5 @@ To run a function or command in a **subshell**:
 > echo "$EXITCODE"
 > # => 1
 > ```
+
+{% endraw %}
