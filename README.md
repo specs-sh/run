@@ -120,12 +120,5 @@ To run a function or command in a **subshell**:
 
 > `run.sh` supports both braces and brackets to support commands which use brackets or braces as arguments.
 >
-> If you want to call the `[` shell builtin function, you must wrap the command in `{ ... }`:
-> ```sh
-> run { [ 1 -eq 1 ] }
-> echo "$EXITCODE"
-> # => 0
-> run { [ 1 -eq 2 ] }
-> echo "$EXITCODE"
-> # => 1
-> ```
+> To call the `[` shell builtin function, you must wrap the command in braces: `run { [ 1 -eq 2 ] }`
+``
