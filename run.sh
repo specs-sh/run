@@ -48,6 +48,51 @@ run() {
       echo "'run' called with '{{' block but no closing '}}' found" >&2
       return 1
     fi
+  elif [ "$1" = "[" ]
+  then
+    shift
+    while [ "$1" != "]" ] && [ $# -gt 0 ]
+    do
+      ___run___CommandToRun+=("$1")
+      shift
+    done
+    if [ "$1" = "]" ]
+    then
+      shift
+      if [ $# -ne 0 ]
+      then
+        # TODO TEST
+        echo "'run' called with '[ ... ]' block but unexpected argument found after block: '$1'" >&2
+        return 1
+      fi
+    else
+      # TODO TEST
+      echo "'run' called with '[' block but no closing ']' found" >&2
+      return 1
+    fi
+  elif [ "$1" = "[[" ]
+  then
+    ___run___RunInSubshell=true
+    shift
+    while [ "$1" != "]]" ] && [ $# -gt 0 ]
+    do
+      ___run___CommandToRun+=("$1")
+      shift
+    done
+    if [ "$1" = "]]" ]
+    then
+      shift
+      if [ $# -ne 0 ]
+      then
+        # TODO TEST
+        echo "'run' called with '[[ ... ]]' block but unexpected argument found after block: '$1'" >&2
+        return 1
+      fi
+    else
+      # TODO TEST
+      echo "'run' called with '[[' block but no closing ']]' found" >&2
+      return 1
+    fi
   else
     while [ $# -gt 0 ]
     do
