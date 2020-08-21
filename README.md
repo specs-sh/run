@@ -18,9 +18,7 @@
 
 Download the [latest version](https://github.com/bx-sh/run.sh/archive/v0.4.0.tar.gz) by clicking one of the download links above or:
 
-```sh
-curl -o- https://run.assert.sh/installer.sh | bash
-```
+#### `curl -o- https://run.assert.sh/installer.sh | bash`
 
 Source the downloaded `run.sh` script to use in your tests:
 
