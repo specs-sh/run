@@ -1,4 +1,4 @@
-#! /usr/bin/env installer
+#! /usr/bin/env bash
 
 install() {
   echo "🚀 [run.sh]"
