@@ -355,7 +355,7 @@ verifyRunsLocally() {
 }
 
 spec.run.does.not.run.in.subshell() {
-  local -i foo=5
+  local foo=5
   (( foo == 5 ))
 
   run verifyRunsLocally
@@ -381,14 +381,12 @@ spec.run.does.not.run.in.subshell() {
 }
 
 spec.run.can.be.run.in.subshell() {
-  local -i foo=5
+  local foo=5
 
   run {{ verifyRunsLocally }}
-
   (( foo == 5 ))
 
   run [[ verifyRunsLocally ]]
-
   (( foo == 5 ))
 }
 

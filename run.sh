@@ -2,7 +2,7 @@ run() {
   STDOUT= STDERR= EXITCODE=
 
   local -r RUN_VERSION="1.0.0"
-  [ "$1" = --version ] && { echo "run version $RUN_VERSION"; return 0; }
+  [ "${1:-}" = --version ] && { echo "run version $RUN_VERSION"; return 0; }
   (( $# == 0 )) && return 0
 
   local -a __run__command=()
@@ -24,7 +24,7 @@ run() {
   fi
 
   __run__stderrTempFile="$( mktemp )" || { echo "run: failed to create temporary file to store standard error using 'mktemp'" >&2; return 2; }
-  if [ -n "$__run__runInSubshell" ]; then
+  if [ -n "${__run__runInSubshell:-}" ]; then
     STDOUT="$( "${__run__command[@]}" 2>"$__run__stderrTempFile" )" && EXITCODE=$? || EXITCODE=$?
   else
     __run__stdoutTempFile="$( mktemp )" || { echo "run: failed to create temporary file to store standard output using 'mktemp'" >&2; return 2; }
