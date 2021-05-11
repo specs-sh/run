@@ -1,94 +1,39 @@
 run() {
-  local RUN_VERSION="0.4.0"
-  [[ "$1" = "--version" ]] && { echo "run version $RUN_VERSION"; return 0; }
-  local ___run___RunInSubshell=false
-  declare -a ___run___CommandToRun=()
-  if [ "$1" = "{" ]; then
-    shift
-    while [ "$1" != "}" ] && [ $# -gt 0 ]; do
-      ___run___CommandToRun+=("$1")
-      shift
-    done
-    if [ "$1" = "}" ]; then
-      shift
-      if [ $# -ne 0 ]; then
-        echo "'run' called with '{ ... }' block but unexpected argument found after block: '$1'" >&2
-        return 1
-      fi
-    else
-      echo "'run' called with '{' block but no closing '}' found" >&2
-      return 1
-    fi
-  elif [ "$1" = "{{" ]; then
-    ___run___RunInSubshell=true
-    shift
-    while [ "$1" != "}}" ] && [ $# -gt 0 ]; do
-      ___run___CommandToRun+=("$1")
-      shift
-    done
-    if [ "$1" = "}}" ]; then
-      shift
-      if [ $# -ne 0 ]; then
-        echo "'run' called with '{{ ... }}' block but unexpected argument found after block: '$1'" >&2
-        return 1
-      fi
-    else
-      echo "'run' called with '{{' block but no closing '}}' found" >&2
-      return 1
-    fi
-  elif [ "$1" = "[" ]; then
-    shift
-    while [ "$1" != "]" ] && [ $# -gt 0 ]; do
-      ___run___CommandToRun+=("$1")
-      shift
-    done
-    if [ "$1" = "]" ]; then
-      shift
-      if [ $# -ne 0 ]; then
-        echo "'run' called with '[ ... ]' block but unexpected argument found after block: '$1'" >&2
-        return 1
-      fi
-    else
-      echo "'run' called with '[' block but no closing ']' found" >&2
-      return 1
-    fi
-  elif [ "$1" = "[[" ]
-  then
-    ___run___RunInSubshell=true
-    shift
-    while [ "$1" != "]]" ] && [ $# -gt 0 ]; do
-      ___run___CommandToRun+=("$1")
-      shift
-    done
-    if [ "$1" = "]]" ]; then
-      shift
-      if [ $# -ne 0 ]; then
-        echo "'run' called with '[[ ... ]]' block but unexpected argument found after block: '$1'" >&2
-        return 1
-      fi
-    else
-      echo "'run' called with '[[' block but no closing ']]' found" >&2
-      return 1
-    fi
-  else
-    while [ $# -gt 0 ]; do
-      ___run___CommandToRun+=("$1")
-      shift
-    done
+  STDOUT= STDERR= EXITCODE=
+
+  local -r RUN_VERSION="1.0.0"
+  [ "${1:-}" = --version ] && { echo "run version $RUN_VERSION"; return 0; }
+  (( $# == 0 )) && return 0
+
+  local -a __run__command=()
+  local __run__blockOpen= __run__blockClose= __run__runInSubShell= __run__stdoutTempFile __run__stderrTempFile
+
+  case "$1" in
+    {)  __run__blockOpen={;  __run__blockClose=};  shift ;;
+    [)  __run__blockOpen=[;  __run__blockClose=];  shift ;;
+    {{) __run__blockOpen={{; __run__blockClose=}}; shift; __run__runInSubShell=true ;;
+    [[) __run__blockOpen=[[; __run__blockClose=]]; shift; __run__runInSubShell=true ;;
+    *)  __run__command+=("$@"); set -- ;;
+  esac
+
+  if [ -n "$__run__blockClose" ]; then
+    while (( $# > 0 )) && [ "$1" != "$__run__blockClose" ]; do __run__command+=("$1"); shift; done
+    (( $# == 0 )) && { echo "run: called with '$__run__blockOpen' but no closing '$__run__blockClose' found" >&2; return 2; } || shift;
+    (( $# == 1 )) && { echo "run: unexpected argument '$*' after $__run__blockOpen ... $__run__blockClose" >&2; return 2; }
+    (( $# > 1 ))  && { echo "run: unexpected arguments '$*' after $__run__blockOpen ... $__run__blockClose" >&2; return 2; }
   fi
-  local ___run___STDOUT_TempFile="$( mktemp )"
-  local ___run___STDERR_TempFile="$( mktemp )"
-  local ___run___UnusedOutput
-  if [ "$___run___RunInSubshell" = "true" ]; then
-    ___run___UnusedOutput="$( "${___run___CommandToRun[@]}" 1>"$___run___STDOUT_TempFile" 2>"$___run___STDERR_TempFile" )"
-    EXITCODE=$?
+
+  __run__stderrTempFile="$( mktemp )" || { echo "run: failed to create temporary file to store standard error using 'mktemp'" >&2; return 2; }
+  if [ "$__run__runInSubShell" = true ]; then
+    STDOUT="$( "${__run__command[@]}" 2>"$__run__stderrTempFile" )" && EXITCODE=$? || EXITCODE=$?
   else
-    "${___run___CommandToRun[@]}" 1>"$___run___STDOUT_TempFile" 2>"$___run___STDERR_TempFile"
-    EXITCODE=$?
+    __run__stdoutTempFile="$( mktemp )" || { echo "run: failed to create temporary file to store standard output using 'mktemp'" >&2; return 2; }
+    "${__run__command[@]}" 1>"$__run__stdoutTempFile" 2>"$__run__stderrTempFile" && EXITCODE=$? || EXITCODE=$?
+    echo "RAN ${__run__command[*]} ($EXITCODE)"
+    STDOUT="$( < "$__run__stdoutTempFile" )" || echo "run: failed to read standard output from temporary file '$__run__stdoutTempFile' created using 'mktemp'" >&2
+    [ -f "$__run__stdoutTempFile" ] && { rm "$__run__stdoutTempFile" || echo "run: failed to delete temporary file used for standard output '$__run__stdoutTempFile' created using 'mktemp'" >&2; }
   fi
-  STDOUT="$( < "$___run___STDOUT_TempFile" )"
-  STDERR="$( < "$___run___STDERR_TempFile" )"
-  rm -f "$___run___STDOUT_TempFile"
-  rm -f "$___run___STDERR_TempFile"
+  STDERR="$( < "$__run__stderrTempFile" )" || echo "run: failed to read standard error from temporary file '$__run__stderrTempFile' created using 'mktemp'" >&2
+  [ -f "$__run__stderrTempFile" ] && { rm "$__run__stderrTempFile" || echo "run: failed to delete temporary file used for standard error '$__run__stderrTempFile' created using 'mktemp'" >&2; }
   return $EXITCODE
 }
