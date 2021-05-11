@@ -2,9 +2,9 @@
 ---
 
 {% raw %}
-## `run $command`
+# 🚀 `run $command`
 
-> Simplest possible `run` command for beautiful shell script tests!
+> _Simplest possible `run` command for beautiful shell script tests!_
 
 ---
 
@@ -15,11 +15,9 @@
 
 ---
 
-Download the [latest version](https://github.com/bx-sh/run.sh/archive/v0.4.0.tar.gz) by clicking one of the download links above or:
+Download the [latest version](https://github.com/bx-sh/run.sh/archive/v0.4.0.tar.gz) or install via:
 
-```sh
-curl -o- https://run.assert.sh/installer.sh | bash
-```
+#### `curl -o- https://run.specs.sh/install.sh | bash`
 
 Source the downloaded `run.sh` script to use in your tests:
 
@@ -40,9 +38,9 @@ printf "$EXITCODE"
 
 ---
 
-## 🚀 run $command
+## run $command
 
-#### `$STDOUT`
+### `$STDOUT`
 
 To get the standard output, check the `$STDOUT` variable:
 
@@ -53,7 +51,7 @@ printf "$STDOUT"
 # => Hello, world
 ```
 
-#### `$STDERR`
+### `$STDERR`
 
 To get the standard output, check the `$STDERR` variable:
 
@@ -64,7 +62,7 @@ printf "$STDERR"
 # => foo: command not found
 ```
 
-#### `$EXITCODE`
+### `$EXITCODE`
 
 To get the standard output, check the `$EXITCODE` variable:
 
@@ -82,7 +80,7 @@ printf $EXITCODE
 # => 127
 ```
 
-#### `{ Current Shell }` or `{{ Subshell }}`
+### `{ Current Shell }` or `{{ Subshell }}`
 
 To run a function or command in the **current shell**:
 
@@ -107,7 +105,7 @@ To run a function or command in a **subshell**:
    run [[ echo "Hello world" ]] # <--- runs in a SUBSHELL
    ```
 
-##### ℹ️ Subshells
+#### ℹ️ Subshells
 
 Commands run inside subshells have access to all local variables but changes are not reflected in the outer shell:
 
@@ -126,22 +124,7 @@ Commands run inside subshells have access to all local variables but changes are
 
 > `run.sh` supports both braces and brackets to support commands which use brackets or braces as arguments.
 >
-> To call the `[` shell builtin function, use braces: `run { [ 1 -eq 2 ] }`
+> To call the `[` shell builtin function, you must wrap the command in braces: `run { [ 1 -eq 2 ] }`
 
----
-
-## Related Projects
-
- - ☑️ [`assert.sh`](https://assert.sh) for `assert [ 1 -eq 42 ]` style assertions
- - 🧐 [`expect.sh`](https://expectations.sh) for `expect 1 toEqual 42` style assertions
- - 🔬 [`spec.sh`](https://specs.sh) for a lovely shell specification testing framework
-
----
-
-#### Test Framework Compatibility
-
-- [Bats](https://github.com/bats-core/bats-core)
-- [shUnit2](https://github.com/kward/shunit2/)
-- [roundup](http://bmizerany.github.io/roundup/roundup.1.html)
 
 {% endraw %}
