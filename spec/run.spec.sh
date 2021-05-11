@@ -383,9 +383,7 @@ spec.run.does.not.run.in.subshell() {
 spec.run.can.be.run.in.subshell() {
   local foo=5
 
-  echo "Foo is $foo and gonna run in shell..."
   run {{ verifyRunsLocally }}
-  echo "Now foo is $foo"
   [ "$foo" = 5 ]
 
   run [[ verifyRunsLocally ]]
