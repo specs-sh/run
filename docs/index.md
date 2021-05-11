@@ -17,7 +17,9 @@
 
 Download the [latest version](https://github.com/specs-sh/run.sh/archive/v1.0.0.tar.gz) or install via:
 
-#### `curl -o- https://run.specs.sh/install.sh | bash`
+```
+curl -o- https://run.specs.sh/install.sh | bash
+```
 
 Source the downloaded `run.sh` script to use in your tests:
 
@@ -26,13 +28,13 @@ source "run.sh"
 
 run echo "Hello, world"
 
-printf "$STDOUT"
+echo "$STDOUT"
 # => "Hello, world"
 
-printf "$STDERR"
+echo "$STDERR"
 # => ""
 
-printf "$EXITCODE"
+echo "$EXITCODE"
 # => "0"
 ```
 
@@ -47,7 +49,7 @@ To get the standard output, check the `$STDOUT` variable:
 ```sh
 run echo "Hello, world"
 
-printf "$STDOUT"
+echo "$STDOUT"
 # => Hello, world
 ```
 
@@ -58,7 +60,7 @@ To get the standard output, check the `$STDERR` variable:
 ```sh
 run foo "This command does not exist"
 
-printf "$STDERR"
+echo "$STDERR"
 # => foo: command not found
 ```
 
@@ -69,14 +71,14 @@ To get the standard output, check the `$EXITCODE` variable:
 ```sh
 run echo "Hello, world"
 
-printf $EXITCODE
+echo $EXITCODE
 # => 0
 ```
 
 ```sh
 run foo "This command does not exist"
 
-printf $EXITCODE
+echo $EXITCODE
 # => 127
 ```
 
@@ -114,11 +116,11 @@ Commands run inside subshells have access to all local variables but changes are
   x=5
   
   run {{ setX 42 }} # <--- run in subshell
-  printf "$x"
+  echo "$x"
   # => 5            # <--- value of 'x' is still 5
   
   run setX 42       # <--- run in current shell
-  printf "$x"
+  echo "$x"
   # => 42           # <--- value of 'x' changed to '42'
   ```
 
