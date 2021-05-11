@@ -15,7 +15,7 @@
 
 ---
 
-Download the [latest version](https://github.com/bx-sh/run.sh/archive/v0.4.0.tar.gz) or install via:
+Download the [latest version](https://github.com/specs-sh/run.sh/archive/v1.0.0.tar.gz) or install via:
 
 #### `curl -o- https://run.specs.sh/install.sh | bash`
 
