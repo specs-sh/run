@@ -24,7 +24,7 @@ run() {
   fi
 
   __run__stderrTempFile="$( mktemp )" || { echo "run: failed to create temporary file to store standard error using 'mktemp'" >&2; return 2; }
-  if [ -n "${__run__runInSubshell:-}" ]; then
+  if [ "$__run__runInSubShell" = true ]; then
     STDOUT="$( "${__run__command[@]}" 2>"$__run__stderrTempFile" )" && EXITCODE=$? || EXITCODE=$?
   else
     __run__stdoutTempFile="$( mktemp )" || { echo "run: failed to create temporary file to store standard output using 'mktemp'" >&2; return 2; }

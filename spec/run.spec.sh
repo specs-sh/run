@@ -356,38 +356,40 @@ verifyRunsLocally() {
 
 spec.run.does.not.run.in.subshell() {
   local foo=5
-  (( foo == 5 ))
+  [ "$foo" = 5 ]
 
   run verifyRunsLocally
 
-  (( foo != 5 ))
+  [ "$foo" != 5 ]
   [ "$foo" = "Haha! Changed by the command that was run!" ]
 
   foo=5
-  (( foo == 5 ))
+  [ "$foo" = 5 ]
 
   run { verifyRunsLocally }
 
-  (( foo != 5 ))
+  [ "$foo" != 5 ]
   [ "$foo" = "Haha! Changed by the command that was run!" ]
 
   foo=5
-  (( foo == 5 ))
+  [ "$foo" = 5 ]
 
   run [ verifyRunsLocally ]
 
-  (( foo != 5 ))
+  [ "$foo" != 5 ]
   [ "$foo" = "Haha! Changed by the command that was run!" ]
 }
 
 spec.run.can.be.run.in.subshell() {
   local foo=5
 
+  echo "Foo is $foo and gonna run in shell..."
   run {{ verifyRunsLocally }}
-  (( foo == 5 ))
+  echo "Now foo is $foo"
+  [ "$foo" = 5 ]
 
   run [[ verifyRunsLocally ]]
-  (( foo == 5 ))
+  [ "$foo" = 5 ]
 }
 
 spec.curlies.or.brackets.not.closed() {
