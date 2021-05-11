@@ -20,7 +20,7 @@ run() {
     while (( $# > 0 )) && [ "$1" != "$__run__blockClose" ]; do __run__command+=("$1"); shift; done
     (( $# == 0 )) && { echo "run: called with '$__run__blockOpen' but no closing '$__run__blockClose' found" >&2; return 2; } || shift;
     (( $# == 1 )) && { echo "run: unexpected argument '$*' after $__run__blockOpen ... $__run__blockClose" >&2; return 2; }
-    (( $# > 1 )) && { echo "run: unexpected arguments '$*' after $__run__blockOpen ... $__run__blockClose" >&2; return 2; }
+    (( $# > 1 ))  && { echo "run: unexpected arguments '$*' after $__run__blockOpen ... $__run__blockClose" >&2; return 2; }
   fi
 
   __run__stderrTempFile="$( mktemp )" || { echo "run: failed to create temporary file to store standard error using 'mktemp'" >&2; return 2; }
