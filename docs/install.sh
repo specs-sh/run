@@ -2,7 +2,7 @@
 
 ########################
 EMOJI="🚀"
-REPO_ORG="bx-sh"
+REPO_ORG="specs-sh"
 PROJECT_NAME="run.sh"
 FILE_WITH_VERSION_VARIABLE="run.sh"
 VERSION_VARIABLE="RUN_VERSION"
@@ -10,7 +10,7 @@ API_LATEST_RELEASE_INFO_URL="https://api.github.com/repos/$REPO_ORG/$PROJECT_NAM
 FILES_TO_COPY=("run.sh")
 INSTALL_MESSAGE="source \"run.sh\" to start using!
 
-Visit https://run.assert.sh for documentation
+Visit https://run.specs.sh for documentation
 "
 ########################
 

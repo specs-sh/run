@@ -1,10 +1,8 @@
-. "$( bx BxSH )"
+source run.sh
+source vendor/assert.sh
+source vendor/refute.sh
 
-PACKAGE_PATH=.:packages/
-
-import @assert
-import @expect
-import @run
+PATH="$PATH:${BASH_SOURCE[0]%/*}/bin"
 
 happyFunction() {
   echo "Happy STDOUT"
@@ -56,352 +54,358 @@ noSTDERR() {
   return 0
 }
 
-PATH="$PATH:spec/bin"
-
-@spec.get_version() {
-  expect "$( run --version )" toMatch "run[[:space:]]version[[:space:]][0-9].[0-9].[0-9]"
+spec.get.version() {
+  [[ "$( run --version )" =~ run[[:space:]]version[[:space:]][0-9].[0-9].[0-9] ]]
 }
 
-@spec.can_get_exit_code() {
+spec.zero.arguments() {
+  assert run
+}
+
+spec.can_get_exit_code() {
   assert run happyCommand
-  expect "$EXITCODE" toEqual 0
+  (( EXITCODE == 0 ))
 
   refute run sadCommand
-  expect "$EXITCODE" toEqual 1
+  (( EXITCODE == 1 ))
 
   refute run theAnswerCommand
-  expect "$EXITCODE" toEqual 42
+  (( EXITCODE == 42 ))
 }
 
-@spec.can_get_return_code() {
+spec.can.get.return.code() {
   assert run happyFunction
-  expect "$EXITCODE" toEqual 0
+  (( EXITCODE == 0 ))
 
   refute run sadFunction
-  expect "$EXITCODE" toEqual 1
+  (( EXITCODE == 1 ))
 
   refute run theAnswerFunction
-  expect "$EXITCODE" toEqual 42
+  (( EXITCODE == 42 ))
 }
 
-@spec.can_get_STDOUT() {
+spec.can.get.STDOUT() {
   assert run happyFunction
-  expect "$STDOUT" toEqual "Happy STDOUT"
+  [ "$STDOUT" = "Happy STDOUT" ]
 
   refute run sadFunction
-  expect "$STDOUT" toEqual "Sad STDOUT"
+  [ "$STDOUT" = "Sad STDOUT" ]
 
   refute run theAnswerFunction
-  expect "$STDOUT" toEqual "The Answer STDOUT"
+  [ "$STDOUT" = "The Answer STDOUT" ]
 
   run noSTDOUT
-  expect "$STDOUT" toBeEmpty
+  [ -z "$STDOUT" ]
 
   run noSTDERR
-  expect "$STDOUT" not toBeEmpty
+  [ -n "$STDOUT" ]
 }
 
-@spec.single_curly.can_get_STDOUT() {
+spec.single.curly.can.get.STDOUT() {
   assert run { happyFunction }
-  expect "$STDOUT" toEqual "Happy STDOUT"
+  [ "$STDOUT" = "Happy STDOUT" ]
 
   refute run { sadFunction }
-  expect "$STDOUT" toEqual "Sad STDOUT"
+  [ "$STDOUT" = "Sad STDOUT" ]
 
   refute run { theAnswerFunction }
-  expect "$STDOUT" toEqual "The Answer STDOUT"
+  [ "$STDOUT" = "The Answer STDOUT" ]
 
   run { noSTDOUT }
-  expect "$STDOUT" toBeEmpty
+  [ -z "$STDOUT" ]
 
   run { noSTDERR }
-  expect "$STDOUT" not toBeEmpty
+  [ -n "$STDOUT" ]
 
   assert run { happyFunction hello world }
-  expect "$STDOUT" toContain "Happy called with 2 arguments"
-  expect "$STDOUT" toContain "Happy arg 'hello'"
-  expect "$STDOUT" toContain "Happy arg 'world'"
+  [[ "$STDOUT" = *"Happy called with 2 arguments"* ]]
+  [[ "$STDOUT" = *"Happy arg 'hello'"* ]]
+  [[ "$STDOUT" = *"Happy arg 'world'"* ]]
 
   refute run { sadFunction hello "with spaces" world "even\nnewlines" }
-  expect "$STDOUT" toContain "Sad called with 4 arguments"
-  expect "$STDOUT" toContain "Sad arg 'hello'"
-  expect "$STDOUT" toContain "Sad arg 'with spaces'"
-  expect "$STDOUT" toContain "Sad arg 'world'"
-  expect "$STDOUT" toContain "Sad arg 'even\nnewlines'"
+  [[ "$STDOUT" = *"Sad called with 4 arguments"* ]]
+  [[ "$STDOUT" = *"Sad arg 'hello'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'with spaces'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'world'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'even\nnewlines'"* ]]
 }
 
-@spec.single_bracket.can_get_STDOUT() {
+spec.single.bracket.can.get.STDOUT() {
   assert run [ happyFunction ]
-  expect "$STDOUT" toEqual "Happy STDOUT"
+  [ "$STDOUT" = "Happy STDOUT" ]
 
   refute run [ sadFunction ]
-  expect "$STDOUT" toEqual "Sad STDOUT"
+  [ "$STDOUT" = "Sad STDOUT" ]
 
   refute run [ theAnswerFunction ]
-  expect "$STDOUT" toEqual "The Answer STDOUT"
+  [ "$STDOUT" = "The Answer STDOUT" ]
 
   run [ noSTDOUT ]
-  expect "$STDOUT" toBeEmpty
+  [ -z "$STDOUT" ]
 
   run [ noSTDERR ]
-  expect "$STDOUT" not toBeEmpty
+  [ -n "$STDOUT" ]
 
   assert run [ happyFunction hello world ]
-  expect "$STDOUT" toContain "Happy called with 2 arguments"
-  expect "$STDOUT" toContain "Happy arg 'hello'"
-  expect "$STDOUT" toContain "Happy arg 'world'"
+  [[ "$STDOUT" = *"Happy called with 2 arguments"* ]]
+  [[ "$STDOUT" = *"Happy arg 'hello'"* ]]
+  [[ "$STDOUT" = *"Happy arg 'world'"* ]]
 
   refute run [ sadFunction hello "with spaces" world "even\nnewlines" ]
-  expect "$STDOUT" toContain "Sad called with 4 arguments"
-  expect "$STDOUT" toContain "Sad arg 'hello'"
-  expect "$STDOUT" toContain "Sad arg 'with spaces'"
-  expect "$STDOUT" toContain "Sad arg 'world'"
-  expect "$STDOUT" toContain "Sad arg 'even\nnewlines'"
+  [[ "$STDOUT" = *"Sad called with 4 arguments"* ]]
+  [[ "$STDOUT" = *"Sad arg 'hello'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'with spaces'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'world'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'even\nnewlines'"* ]]
 }
 
-@spec.double_curlies.can_get_STDOUT() {
+spec.double.curlies.can.get.STDOUT() {
   assert run {{ happyFunction }}
-  expect "$STDOUT" toEqual "Happy STDOUT"
+  [ "$STDOUT" = "Happy STDOUT" ]
 
   refute run {{ sadFunction }}
-  expect "$STDOUT" toEqual "Sad STDOUT"
+  [ "$STDOUT" = "Sad STDOUT" ]
 
   refute run {{ theAnswerFunction }}
-  expect "$STDOUT" toEqual "The Answer STDOUT"
+  [ "$STDOUT" = "The Answer STDOUT" ]
 
   run {{ noSTDOUT }}
-  expect "$STDOUT" toBeEmpty
+  [ -z "$STDOUT" ]
 
   run {{ noSTDERR }}
-  expect "$STDOUT" not toBeEmpty
+  [ -n "$STDOUT" ]
 
   assert run {{ happyFunction hello world }}
-  expect "$STDOUT" toContain "Happy called with 2 arguments"
-  expect "$STDOUT" toContain "Happy arg 'hello'"
-  expect "$STDOUT" toContain "Happy arg 'world'"
+  [[ "$STDOUT" = *"Happy called with 2 arguments"* ]]
+  [[ "$STDOUT" = *"Happy arg 'hello'"* ]]
+  [[ "$STDOUT" = *"Happy arg 'world'"* ]]
 
   refute run {{ sadFunction hello "with spaces" world "even\nnewlines" }}
-  expect "$STDOUT" toContain "Sad called with 4 arguments"
-  expect "$STDOUT" toContain "Sad arg 'hello'"
-  expect "$STDOUT" toContain "Sad arg 'with spaces'"
-  expect "$STDOUT" toContain "Sad arg 'world'"
-  expect "$STDOUT" toContain "Sad arg 'even\nnewlines'"
+  [[ "$STDOUT" = *"Sad called with 4 arguments"* ]]
+  [[ "$STDOUT" = *"Sad arg 'hello'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'with spaces'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'world'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'even\nnewlines'"* ]]
 }
 
-@spec.double_brackets.can_get_STDOUT() {
+spec.double.brackets.can.get.STDOUT() {
   assert run [[ happyFunction ]]
-  expect "$STDOUT" toEqual "Happy STDOUT"
+  [ "$STDOUT" = "Happy STDOUT" ]
 
   refute run [[ sadFunction ]]
-  expect "$STDOUT" toEqual "Sad STDOUT"
+  [ "$STDOUT" = "Sad STDOUT" ]
 
   refute run [[ theAnswerFunction ]]
-  expect "$STDOUT" toEqual "The Answer STDOUT"
+  [ "$STDOUT" = "The Answer STDOUT" ]
 
   run [[ noSTDOUT ]]
-  expect "$STDOUT" toBeEmpty
+  [ -z "$STDOUT" ]
 
   run [[ noSTDERR ]]
-  expect "$STDOUT" not toBeEmpty
+  [ -n "$STDOUT" ]
 
   assert run [[ happyFunction hello world ]]
-  expect "$STDOUT" toContain "Happy called with 2 arguments"
-  expect "$STDOUT" toContain "Happy arg 'hello'"
-  expect "$STDOUT" toContain "Happy arg 'world'"
+  [[ "$STDOUT" = *"Happy called with 2 arguments"* ]]
+  [[ "$STDOUT" = *"Happy arg 'hello'"* ]]
+  [[ "$STDOUT" = *"Happy arg 'world'"* ]]
 
   refute run [[ sadFunction hello "with spaces" world "even\nnewlines" ]]
-  expect "$STDOUT" toContain "Sad called with 4 arguments"
-  expect "$STDOUT" toContain "Sad arg 'hello'"
-  expect "$STDOUT" toContain "Sad arg 'with spaces'"
-  expect "$STDOUT" toContain "Sad arg 'world'"
-  expect "$STDOUT" toContain "Sad arg 'even\nnewlines'"
+  [[ "$STDOUT" = *"Sad called with 4 arguments"* ]]
+  [[ "$STDOUT" = *"Sad arg 'hello'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'with spaces'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'world'"* ]]
+  [[ "$STDOUT" = *"Sad arg 'even\nnewlines'"* ]]
 }
 
-@spec.can_get_STDERR() {
+spec.can.get.STDERR() {
   assert run happyFunction
-  expect "$STDERR" toEqual "Happy STDERR"
+  [ "$STDERR" = "Happy STDERR" ]
 
   refute run sadFunction
-  expect "$STDERR" toEqual "Sad STDERR"
+  [ "$STDERR" = "Sad STDERR" ]
 
   refute run theAnswerFunction
-  expect "$STDERR" toEqual "The Answer STDERR"
+  [ "$STDERR" = "The Answer STDERR" ]
 
   run noSTDERR
-  expect "$STDERR" toBeEmpty
+  [ -z "$STDERR" ]
 
   run noSTDOUT
-  expect "$STDERR" not toBeEmpty
+  [ -n "$STDERR" ]
 }
 
-@spec.single_curly.can_get_STDERR() {
+spec.single.curly.can.get.STDERR() {
   assert run { happyFunction }
-  expect "$STDERR" toEqual "Happy STDERR"
+  [ "$STDERR" = "Happy STDERR" ]
 
   refute run { sadFunction }
-  expect "$STDERR" toEqual "Sad STDERR"
+  [ "$STDERR" = "Sad STDERR" ]
 
   refute run { theAnswerFunction }
-  expect "$STDERR" toEqual "The Answer STDERR"
+  [ "$STDERR" = "The Answer STDERR" ]
 
   run { noSTDERR }
-  expect "$STDERR" toBeEmpty
+  [ -z "$STDERR" ]
 
   run { noSTDOUT }
-  expect "$STDERR" not toBeEmpty
+  [ -n "$STDERR" ]
 
   assert run { happyFunction hello world }
-  expect "$STDERR" toContain "Happy called with 2 arguments"
-  expect "$STDERR" toContain "Happy arg 'hello'"
-  expect "$STDERR" toContain "Happy arg 'world'"
+  [[ "$STDERR" = *"Happy called with 2 arguments"* ]]
+  [[ "$STDERR" = *"Happy arg 'hello'"* ]]
+  [[ "$STDERR" = *"Happy arg 'world'"* ]]
 
   refute run { sadFunction hello "with spaces" world "even\nnewlines" }
-  expect "$STDERR" toContain "Sad called with 4 arguments"
-  expect "$STDERR" toContain "Sad arg 'hello'"
-  expect "$STDERR" toContain "Sad arg 'with spaces'"
-  expect "$STDERR" toContain "Sad arg 'world'"
-  expect "$STDERR" toContain "Sad arg 'even\nnewlines'"
+  [[ "$STDERR" = *"Sad called with 4 arguments"* ]]
+  [[ "$STDERR" = *"Sad arg 'hello'"* ]]
+  [[ "$STDERR" = *"Sad arg 'with spaces'"* ]]
+  [[ "$STDERR" = *"Sad arg 'world'"* ]]
+  [[ "$STDERR" = *"Sad arg 'even\nnewlines'"* ]]
 }
 
-@spec.single_bracket.can_get_STDERR() {
+spec.single.bracket.can.get.STDERR() {
   assert run [ happyFunction ]
-  expect "$STDERR" toEqual "Happy STDERR"
+  [ "$STDERR" = "Happy STDERR" ]
 
   refute run [ sadFunction ]
-  expect "$STDERR" toEqual "Sad STDERR"
+  [ "$STDERR" = "Sad STDERR" ]
 
   refute run [ theAnswerFunction ]
-  expect "$STDERR" toEqual "The Answer STDERR"
+  [ "$STDERR" = "The Answer STDERR" ]
 
   run [ noSTDERR ]
-  expect "$STDERR" toBeEmpty
+  [ -z "$STDERR" ]
 
   run [ noSTDOUT ]
-  expect "$STDERR" not toBeEmpty
+  [ -n "$STDERR" ]
 
   assert run [ happyFunction hello world ]
-  expect "$STDERR" toContain "Happy called with 2 arguments"
-  expect "$STDERR" toContain "Happy arg 'hello'"
-  expect "$STDERR" toContain "Happy arg 'world'"
+  [[ "$STDERR" = *"Happy called with 2 arguments"* ]]
+  [[ "$STDERR" = *"Happy arg 'hello'"* ]]
+  [[ "$STDERR" = *"Happy arg 'world'"* ]]
 
   refute run [ sadFunction hello "with spaces" world "even\nnewlines" ]
-  expect "$STDERR" toContain "Sad called with 4 arguments"
-  expect "$STDERR" toContain "Sad arg 'hello'"
-  expect "$STDERR" toContain "Sad arg 'with spaces'"
-  expect "$STDERR" toContain "Sad arg 'world'"
-  expect "$STDERR" toContain "Sad arg 'even\nnewlines'"
+  [[ "$STDERR" = *"Sad called with 4 arguments"* ]]
+  [[ "$STDERR" = *"Sad arg 'hello'"* ]]
+  [[ "$STDERR" = *"Sad arg 'with spaces'"* ]]
+  [[ "$STDERR" = *"Sad arg 'world'"* ]]
+  [[ "$STDERR" = *"Sad arg 'even\nnewlines'"* ]]
 }
 
-@spec.double_curlies.can_get_STDERR() {
+spec.double.curlies.can.get.STDERR() {
   assert run {{ happyFunction }}
-  expect "$STDERR" toEqual "Happy STDERR"
+  [ "$STDERR" = "Happy STDERR" ]
 
   refute run {{ sadFunction }}
-  expect "$STDERR" toEqual "Sad STDERR"
+  [ "$STDERR" = "Sad STDERR" ]
 
   refute run {{ theAnswerFunction }}
-  expect "$STDERR" toEqual "The Answer STDERR"
+  [ "$STDERR" = "The Answer STDERR" ]
 
   run {{ noSTDERR }}
-  expect "$STDERR" toBeEmpty
+  [ -z "$STDERR" ]
 
   run {{ noSTDOUT }}
-  expect "$STDERR" not toBeEmpty
+  [ -n "$STDERR" ]
 
   assert run {{ happyFunction hello world }}
-  expect "$STDERR" toContain "Happy called with 2 arguments"
-  expect "$STDERR" toContain "Happy arg 'hello'"
-  expect "$STDERR" toContain "Happy arg 'world'"
+  [[ "$STDERR" = *"Happy called with 2 arguments"* ]]
+  [[ "$STDERR" = *"Happy arg 'hello'"* ]]
+  [[ "$STDERR" = *"Happy arg 'world'"* ]]
 
   refute run {{ sadFunction hello "with spaces" world "even\nnewlines" }}
-  expect "$STDERR" toContain "Sad called with 4 arguments"
-  expect "$STDERR" toContain "Sad arg 'hello'"
-  expect "$STDERR" toContain "Sad arg 'with spaces'"
-  expect "$STDERR" toContain "Sad arg 'world'"
-  expect "$STDERR" toContain "Sad arg 'even\nnewlines'"
+  [[ "$STDERR" = *"Sad called with 4 arguments"* ]]
+  [[ "$STDERR" = *"Sad arg 'hello'"* ]]
+  [[ "$STDERR" = *"Sad arg 'with spaces'"* ]]
+  [[ "$STDERR" = *"Sad arg 'world'"* ]]
+  [[ "$STDERR" = *"Sad arg 'even\nnewlines'"* ]]
 }
 
-@spec.double_brackets.can_get_STDERR() {
+spec.double.brackets.can.get.STDERR() {
   assert run [[ happyFunction ]]
-  expect "$STDERR" toEqual "Happy STDERR"
+  [ "$STDERR" = "Happy STDERR" ]
 
   refute run [[ sadFunction ]]
-  expect "$STDERR" toEqual "Sad STDERR"
+  [ "$STDERR" = "Sad STDERR" ]
 
   refute run [[ theAnswerFunction ]]
-  expect "$STDERR" toEqual "The Answer STDERR"
+  [ "$STDERR" = "The Answer STDERR" ]
 
   run [[ noSTDERR ]]
-  expect "$STDERR" toBeEmpty
+  [ -z "$STDERR" ]
 
   run [[ noSTDOUT ]]
-  expect "$STDERR" not toBeEmpty
+  [ -n "$STDERR" ]
 
   assert run [[ happyFunction hello world ]]
-  expect "$STDERR" toContain "Happy called with 2 arguments"
-  expect "$STDERR" toContain "Happy arg 'hello'"
-  expect "$STDERR" toContain "Happy arg 'world'"
+  [[ "$STDERR" = *"Happy called with 2 arguments"* ]]
+  [[ "$STDERR" = *"Happy arg 'hello'"* ]]
+  [[ "$STDERR" = *"Happy arg 'world'"* ]]
 
   refute run [[ sadFunction hello "with spaces" world "even\nnewlines" ]]
-  expect "$STDERR" toContain "Sad called with 4 arguments"
-  expect "$STDERR" toContain "Sad arg 'hello'"
-  expect "$STDERR" toContain "Sad arg 'with spaces'"
-  expect "$STDERR" toContain "Sad arg 'world'"
-  expect "$STDERR" toContain "Sad arg 'even\nnewlines'"
+  [[ "$STDERR" = *"Sad called with 4 arguments"* ]]
+  [[ "$STDERR" = *"Sad arg 'hello'"* ]]
+  [[ "$STDERR" = *"Sad arg 'with spaces'"* ]]
+  [[ "$STDERR" = *"Sad arg 'world'"* ]]
+  [[ "$STDERR" = *"Sad arg 'even\nnewlines'"* ]]
 }
 
 verifyRunsLocally() {
   foo="Haha! Changed by the command that was run!"
 }
 
-@spec.run.does_not_run_in_subshell() {
-  local foo=5
-  expect "$foo" toEqual 5
+spec.run.does.not.run.in.subshell() {
+  local -i foo=5
+  (( foo == 5 ))
 
   run verifyRunsLocally
 
-  expect "$foo" not toEqual 5
-  expect "$foo" toEqual "Haha! Changed by the command that was run!"
+  (( foo != 5 ))
+  [ "$foo" = "Haha! Changed by the command that was run!" ]
 
   foo=5
-  expect "$foo" toEqual 5
+  (( foo == 5 ))
 
   run { verifyRunsLocally }
 
-  expect "$foo" not toEqual 5
-  expect "$foo" toEqual "Haha! Changed by the command that was run!"
+  (( foo != 5 ))
+  [ "$foo" = "Haha! Changed by the command that was run!" ]
 
   foo=5
-  expect "$foo" toEqual 5
+  (( foo == 5 ))
 
   run [ verifyRunsLocally ]
 
-  expect "$foo" not toEqual 5
-  expect "$foo" toEqual "Haha! Changed by the command that was run!"
+  (( foo != 5 ))
+  [ "$foo" = "Haha! Changed by the command that was run!" ]
 }
 
-@spec.run.can_be_run_in_subshell() {
-  local foo=5
+spec.run.can.be.run.in.subshell() {
+  local -i foo=5
 
   run {{ verifyRunsLocally }}
 
-  expect "$foo" toEqual 5
+  (( foo == 5 ))
 
   run [[ verifyRunsLocally ]]
 
-  expect "$foo" toEqual 5
+  (( foo == 5 ))
 }
 
-@spec.curlies_or_brackets_not_closed() {
-  expect [ run { hello ] toFail "'run' called with '{' block but no closing '}' found"
-  expect [ run {{ hello ] toFail "'run' called with '{{' block but no closing '}}' found"
-  expect { run [ hello } toFail "'run' called with '[' block but no closing ']' found"
-  expect { run [[ hello } toFail "'run' called with '[[' block but no closing ']]' found"
+spec.curlies.or.brackets.not.closed() {
+  refute run run { hello ]
+  [[ "$STDERR" = *"run: called with '{' but no closing '}' found"* ]]
+  refute run run {{ hello ]
+  [[ "$STDERR" = *"run: called with '{{' but no closing '}}' found"* ]]
+  refute run run [ hello ]]
+  [[ "$STDERR" = *"run: called with '[' but no closing ']' found"* ]]
+  refute run run [[ hello ]
+  [[ "$STDERR" = *"run: called with '[[' but no closing ']]' found"* ]]
 }
 
-@spec.curlies_or_brackets_with_extra_arguments() {
-  expect [ run { ls } anotherArg ] toFail "'run' called with '{ ... }' block but unexpected argument found after block: 'anotherArg'"
-  expect [ run {{ ls }} anotherArg ] toFail "'run' called with '{{ ... }}' block but unexpected argument found after block: 'anotherArg'"
-  expect { run [ ls ] anotherArg } toFail "'run' called with '[ ... ]' block but unexpected argument found after block: 'anotherArg'"
-  expect { run [[ ls ]] anotherArg } toFail "'run' called with '[[ ... ]]' block but unexpected argument found after block: 'anotherArg'"
+spec.curlies.or.brackets.with.extra.arguments() {
+  refute run run { ls } extra
+  [[ "$STDERR" = *"run: unexpected argument 'extra' after { ... }"* ]]
+  refute run run [[ ls ]] hello world
+  [[ "$STDERR" = *"run: unexpected arguments 'hello world' after [[ ... ]]"* ]]
 }

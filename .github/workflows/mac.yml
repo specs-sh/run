@@ -2,21 +2,18 @@ name: Mac (BASH 3.2)
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: bx-sh/setup-bx@master
       - run: "bash --version | head -1"
         shell: bash
-      - run: echo "::add-path::packages/bin"
-        shell: bash
-      - run: bx spec
+      - run: "./vendor/microspec spec/*.spec.sh"
         shell: bash
         env:
           VERBOSE: true

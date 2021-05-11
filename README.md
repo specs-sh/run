@@ -1,5 +1,4 @@
-[![Mac (BASH 3.2)](https://github.com/bx-sh/run.sh/workflows/Mac%20(BASH%203.2)/badge.svg)](https://github.com/bx-sh/run.sh/actions?query=workflow%3A%22Mac+%28BASH+3.2%29%22) [![BASH 4.3](https://github.com/bx-sh/run.sh/workflows/BASH%204.3/badge.svg)](https://github.com/bx-sh/run.sh/actions?query=workflow%3A%22BASH+4.3%22) [![BASH 4.4](https://github.com/bx-sh/run.sh/workflows/BASH%204.4/badge.svg)](https://github.com/bx-sh/run.sh/actions?query=workflow%3A%22BASH+4.4%22) [![BASH 5.0](https://github.com/bx-sh/run.sh/workflows/BASH%205.0/badge.svg)](https://github.com/bx-sh/run.sh/actions?query=workflow%3A%22BASH+5.0%22)  
-[![Mac (Installer)](https://github.com/bx-sh/run.sh/workflows/Mac%20(Installer)/badge.svg)](https://github.com/bx-sh/run.sh/actions?query=workflow%3A%22Mac+%28Installer%29%22) [![Linux (Installer)](https://github.com/bx-sh/run.sh/workflows/Linux%20(Installer)/badge.svg)](https://github.com/bx-sh/run.sh/actions?query=workflow%3A%22Linux+%28Installer%29%22)
+[![Mac (BASH 3.2)](https://github.com/specs-sh/run/workflows/Mac%20(BASH%203.2)/badge.svg)](https://github.com/specs-sh/run/actions?query=workflow%3A%22Mac+%28BASH+3.2%29%22) [![BASH 4.0](https://github.com/specs-sh/run/workflows/BASH%204.0/badge.svg)](https://github.com/specs-sh/run/actions?query=workflow%3A%22BASH+4.0%22) [![BASH 4.4](https://github.com/specs-sh/run/workflows/BASH%204.4/badge.svg)](https://github.com/specs-sh/run/actions?query=workflow%3A%22BASH+4.4%22) [![BASH 5.0](https://github.com/specs-sh/run/workflows/BASH%205.0/badge.svg)](https://github.com/specs-sh/run/actions?query=workflow%3A%22BASH+5.0%22)
 
 ---
 
@@ -18,7 +17,7 @@
 
 Download the [latest version](https://github.com/bx-sh/run.sh/archive/v0.4.0.tar.gz) or install via:
 
-#### `curl -o- https://run.assert.sh/installer.sh | bash`
+#### `curl -o- https://run.specs.sh/install.sh | bash`
 
 Source the downloaded `run.sh` script to use in your tests:
 
@@ -126,19 +125,3 @@ Commands run inside subshells have access to all local variables but changes are
 > `run.sh` supports both braces and brackets to support commands which use brackets or braces as arguments.
 >
 > To call the `[` shell builtin function, you must wrap the command in braces: `run { [ 1 -eq 2 ] }`
-
----
-
-## Related Projects
-
- - ☑️ [`assert.sh`](https://assert.sh) for `assert [ 1 -eq 42 ]` style assertions
- - 🧐 [`expect.sh`](https://expectations.sh) for `expect 1 toEqual 42` style assertions
- - 🔬 [`spec.sh`](https://specs.sh) for a lovely shell specification testing framework
-
----
-
-#### Test Framework Compatibility
-
-- [Bats](https://github.com/bats-core/bats-core)
-- [shUnit2](https://github.com/kward/shunit2/)
-- [roundup](http://bmizerany.github.io/roundup/roundup.1.html)
