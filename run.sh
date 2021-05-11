@@ -1,7 +1,7 @@
 run() {
   STDOUT= STDERR= EXITCODE=
 
-  local -r RUN_VERSION="1.0.0"
+  local -r RUN_VERSION="1.1.0"
   [ "${1:-}" = --version ] && { echo "run version $RUN_VERSION"; return 0; }
   (( $# == 0 )) && return 0
 
@@ -29,7 +29,6 @@ run() {
   else
     __run__stdoutTempFile="$( mktemp )" || { echo "run: failed to create temporary file to store standard output using 'mktemp'" >&2; return 2; }
     "${__run__command[@]}" 1>"$__run__stdoutTempFile" 2>"$__run__stderrTempFile" && EXITCODE=$? || EXITCODE=$?
-    echo "RAN ${__run__command[*]} ($EXITCODE)"
     STDOUT="$( < "$__run__stdoutTempFile" )" || echo "run: failed to read standard output from temporary file '$__run__stdoutTempFile' created using 'mktemp'" >&2
     [ -f "$__run__stdoutTempFile" ] && { rm "$__run__stdoutTempFile" || echo "run: failed to delete temporary file used for standard output '$__run__stdoutTempFile' created using 'mktemp'" >&2; }
   fi
