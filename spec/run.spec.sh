@@ -407,3 +407,33 @@ spec.curlies.or.brackets.with.extra.arguments() {
   refute run run [[ ls ]] hello world
   [[ "$STDERR" = *"run: unexpected arguments 'hello world' after [[ ... ]]"* ]]
 }
+
+spec.can.print.run.info() {
+  assert run echo Hello
+  [[ "$STDOUT" != *"RUN: echo hello"* ]]
+  [[ "$STDOUT" != *"EXITCODE: 0"* ]]
+  [[ "$STDOUT" != *"STDOUT: 'Hello'"* ]]
+  [[ "$STDOUT" != *"STDERR: ''"* ]]
+
+  assert run run -p echo Hello
+  [[ "$STDOUT" = *"RUN: echo Hello"* ]]
+  [[ "$STDOUT" = *"EXITCODE: 0"* ]]
+  [[ "$STDOUT" = *"STDOUT: 'Hello'"* ]]
+  [[ "$STDOUT" = *"STDERR: ''"* ]]
+
+  assert run run --print echo "Hello, world!"
+  [[ "$STDOUT" = *"RUN: echo Hello, world!"* ]]
+  [[ "$STDOUT" = *"EXITCODE: 0"* ]]
+  [[ "$STDOUT" = *"STDOUT: 'Hello, world!'"* ]]
+  [[ "$STDOUT" = *"STDERR: ''"* ]]
+
+  assert run run -p echoToStderr Hello
+  [[ "$STDOUT" = *"RUN: echoToStderr Hello"* ]]
+  [[ "$STDOUT" = *"EXITCODE: 0"* ]]
+  [[ "$STDOUT" = *"STDOUT: ''"* ]]
+  [[ "$STDOUT" = *"STDERR: 'Hello'"* ]]
+}
+
+echoToStderr() {
+  echo "$@" >&2
+}

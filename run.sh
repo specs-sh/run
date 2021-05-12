@@ -1,12 +1,12 @@
 run() {
   STDOUT= STDERR= EXITCODE=
-
-  local -r RUN_VERSION="1.1.0"
-  [ "${1:-}" = --version ] && { echo "run version $RUN_VERSION"; return 0; }
-  (( $# == 0 )) && return 0
-
   local -a __run__command=()
-  local __run__blockOpen= __run__blockClose= __run__runInSubShell= __run__stdoutTempFile __run__stderrTempFile
+  local __run__printResults= __run__blockOpen= __run__blockClose= __run__runInSubShell= __run__stdoutTempFile __run__stderrTempFile
+
+  local -r RUN_VERSION="1.2.0"
+  [ "${1:-}" = --version ] && { echo "run version $RUN_VERSION"; return 0; }
+  [ "${1:-}" = -p ] || [ "${1:-}" = --print ] && { __run__printResults=true; shift; }
+  (( $# == 0 )) && return 0
 
   case "$1" in
     {)  __run__blockOpen={;  __run__blockClose=};  shift ;;
@@ -34,5 +34,10 @@ run() {
   fi
   STDERR="$( < "$__run__stderrTempFile" )" || echo "run: failed to read standard error from temporary file '$__run__stderrTempFile' created using 'mktemp'" >&2
   [ -f "$__run__stderrTempFile" ] && { rm "$__run__stderrTempFile" || echo "run: failed to delete temporary file used for standard error '$__run__stderrTempFile' created using 'mktemp'" >&2; }
+
+  if [ "$__run__printResults" = true ]; then
+    printf "RUN: %s\nEXITCODE: %s\nSTDOUT: '%s'\nSTDERR: '%s'\n" "${__run__command[*]}" "$EXITCODE" "$STDOUT" "$STDERR"
+  fi
+
   return $EXITCODE
 }
