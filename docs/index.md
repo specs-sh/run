@@ -15,7 +15,7 @@
 
 ---
 
-Download the [latest version](https://github.com/specs-sh/run.sh/archive/v1.2.0.tar.gz) or install via:
+Download the [latest version](https://github.com/specs-sh/run/archive/v1.2.0.tar.gz) or install via:
 
 ```
 curl -o- https://run.specs.sh/install.sh | bash
@@ -124,7 +124,7 @@ Commands run inside subshells have access to all local variables but changes are
   # => 42           # <--- value of 'x' changed to '42'
   ```
 
-> `run.sh` supports both braces and brackets to support commands which use brackets or braces as arguments.
+> `run` supports both braces and brackets to support commands which use brackets or braces as arguments.
 >
 > To call the `[` shell builtin function, you must wrap the command in braces: `run { [ 1 -eq 2 ] }`
 

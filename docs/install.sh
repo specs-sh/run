@@ -3,7 +3,7 @@
 ########################
 EMOJI="🚀"
 REPO_ORG="specs-sh"
-PROJECT_NAME="run.sh"
+PROJECT_NAME="run"
 FILE_WITH_VERSION_VARIABLE="run.sh"
 VERSION_VARIABLE="RUN_VERSION"
 API_LATEST_RELEASE_INFO_URL="https://api.github.com/repos/$REPO_ORG/$PROJECT_NAME/releases/latest"
