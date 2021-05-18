@@ -15,7 +15,7 @@
 
 ---
 
-Download the [latest version](https://github.com/specs-sh/run/archive/v1.2.0.tar.gz) or install via:
+Download the [latest version](https://github.com/specs-sh/run/archive/v1.3.0.tar.gz) or install via:
 
 ```
 curl -o- https://run.specs.sh/install.sh | bash

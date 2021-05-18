@@ -3,7 +3,7 @@ run() {
   local -a __run__command=()
   local __run__printResults= __run__blockOpen= __run__blockClose= __run__runInSubShell= __run__stdoutTempFile __run__stderrTempFile __run__setE
 
-  local -r RUN_VERSION="1.2.0"
+  local -r RUN_VERSION="1.3.0"
   [ "${1:-}" = --version ] && { echo "run version $RUN_VERSION"; return 0; }
   [ "${1:-}" = -p ] || [ "${1:-}" = --print ] && { __run__printResults=true; shift; }
   (( $# == 0 )) && return 0
@@ -13,6 +13,10 @@ run() {
     [)  __run__blockOpen=[;  __run__blockClose=];  shift ;;
     {{) __run__blockOpen={{; __run__blockClose=}}; shift; __run__runInSubShell=true ;;
     [[) __run__blockOpen=[[; __run__blockClose=]]; shift; __run__runInSubShell=true ;;
+    {{{)  __run__blockOpen={{{;  __run__blockClose=}}};  shift ;;
+    [[[)  __run__blockOpen=[[[;  __run__blockClose=]]];  shift ;;
+    {{{{) __run__blockOpen={{{{; __run__blockClose=}}}}; shift; __run__runInSubShell=true ;;
+    [[[[) __run__blockOpen=[[[[; __run__blockClose=]]]]; shift; __run__runInSubShell=true ;;
     *)  __run__command+=("$@"); set -- ;;
   esac
 

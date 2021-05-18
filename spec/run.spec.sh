@@ -378,6 +378,22 @@ spec.run.does.not.run.in.subshell() {
 
   [ "$foo" != 5 ]
   [ "$foo" = "Haha! Changed by the command that was run!" ]
+
+  foo=5
+  [ "$foo" = 5 ]
+
+  run [[[ verifyRunsLocally ]]]
+
+  [ "$foo" != 5 ]
+  [ "$foo" = "Haha! Changed by the command that was run!" ]
+
+  foo=5
+  [ "$foo" = 5 ]
+
+  run {{{ verifyRunsLocally }}}
+
+  [ "$foo" != 5 ]
+  [ "$foo" = "Haha! Changed by the command that was run!" ]
 }
 
 spec.run.can.be.run.in.subshell() {
@@ -387,6 +403,12 @@ spec.run.can.be.run.in.subshell() {
   [ "$foo" = 5 ]
 
   run [[ verifyRunsLocally ]]
+  [ "$foo" = 5 ]
+
+  run [[[[ verifyRunsLocally ]]]]
+  [ "$foo" = 5 ]
+
+  run {{{{ verifyRunsLocally }}}}
   [ "$foo" = 5 ]
 }
 
@@ -399,6 +421,14 @@ spec.curlies.or.brackets.not.closed() {
   [[ "$STDERR" = *"run: called with '[' but no closing ']' found"* ]]
   refute run run [[ hello ]
   [[ "$STDERR" = *"run: called with '[[' but no closing ']]' found"* ]]
+  refute run run [[[ hello ]
+  [[ "$STDERR" = *"run: called with '[[[' but no closing ']]]' found"* ]]
+  refute run run [[[[ hello ]
+  [[ "$STDERR" = *"run: called with '[[[[' but no closing ']]]]' found"* ]]
+  refute run run {{{ hello ]
+  [[ "$STDERR" = *"run: called with '{{{' but no closing '}}}' found"* ]]
+  refute run run {{{{ hello ]
+  [[ "$STDERR" = *"run: called with '{{{{' but no closing '}}}}' found"* ]]
 }
 
 spec.curlies.or.brackets.with.extra.arguments() {
