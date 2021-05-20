@@ -467,3 +467,15 @@ spec.can.print.run.info() {
 echoToStderr() {
   echo "$@" >&2
 }
+
+# When this happens, it blows up the whole process.
+# So we at least print the error to STDERR for the
+# testing framework to pickup.
+# This tests 'set -u' support by running a failing
+# spec using a test framework and asserting that
+# the 'set -u' error is visible in the failure output.
+spec.can.capture.set.u.errors() {
+  refute run ./vendor/microspec spec/examples/set-u.spec.sh
+  (( EXITCODE != 0 ))
+  [[ "$STDOUT" = *"UNSET_VAR: unbound variable"* ]]
+}
