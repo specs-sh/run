@@ -16,7 +16,11 @@ run() {
       echo "$STDERR" >&2
       rm "$__run__stderrTempFile" || echo "run: failed to delete temporary file used for standard error '$__run__stderrTempFile' created using 'mktemp'" >&2
     fi
-    trap "$__run__existingExitTrap" EXIT
+    if [ -z "$__run__existingExitTrap" ]; then
+      trap -- EXIT
+    else
+      trap "$__run__existingExitTrap" EXIT
+    fi
     [ "$__run__setE" = true ] && set -e
     return 0
   else
