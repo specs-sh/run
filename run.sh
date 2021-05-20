@@ -66,7 +66,11 @@ run() {
       trap "run --on-EXIT \"$__run__stdoutTempFile\" \"$__run__stderrTempFile\" \"$__run__existingExitTrap\" \"$__run__setE\"; $__run__existingExitTrap" EXIT
     fi
     "${__run__command[@]}" 1>"$__run__stdoutTempFile" 2>"$__run__stderrTempFile" && EXITCODE=$? || EXITCODE=$?
-    trap "$__run__existingExitTrap" EXIT
+    if [ -z "$__run__existingExitTrap" ]; then
+      trap -- EXIT
+    else
+      trap "$__run__existingExitTrap" EXIT
+    fi
     [ "$__run__setE" = true ] && set -e
     STDOUT="$( < "$__run__stdoutTempFile" )" || echo "run: failed to read standard output from temporary file '$__run__stdoutTempFile' created using 'mktemp'" >&2
     [ -f "$__run__stdoutTempFile" ] && { rm "$__run__stdoutTempFile" || echo "run: failed to delete temporary file used for standard output '$__run__stdoutTempFile' created using 'mktemp'" >&2; }
