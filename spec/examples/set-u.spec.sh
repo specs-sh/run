@@ -2,6 +2,8 @@ source run.sh
 
 after() {
   echo "In 'after', the STDERR is: '$STDERR'"
+  echo "In 'after', the STDOUT is: '$STDOUT'"
+  echo "In 'after', the EXITCODE is: $EXITCODE"
 }
 
 spec.can.capture.set.u.errors() {
@@ -11,5 +13,6 @@ spec.can.capture.set.u.errors() {
 
 thisCausesSetUError() {
   set -u
+  echo Hello
   x="$UNSET_VAR"
 }

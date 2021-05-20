@@ -478,4 +478,7 @@ spec.can.capture.set.u.errors() {
   refute run ./vendor/microspec spec/examples/set-u.spec.sh
   (( EXITCODE != 0 ))
   [[ "$STDOUT" = *"UNSET_VAR: unbound variable"* ]]
+  [[ "$STDOUT" = *"In 'after', the STDERR is: 'spec/examples/set-u.spec.sh: line 17: UNSET_VAR: unbound variable"* ]]
+  [[ "$STDOUT" = *"In 'after', the STDOUT is: 'Hello'"* ]]
+  [[ "$STDOUT" = *"In 'after', the EXITCODE is: 1"* ]]
 }
